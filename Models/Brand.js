@@ -9,7 +9,6 @@ Brand.init({
     },
     categoryId:{
         type: DataTypes.INTEGER,
-        autoIncrement: true
     },
     brandName:{
         type:DataTypes.STRING,

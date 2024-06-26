@@ -1,0 +1,10 @@
+import express from 'express';
+import categoryController from '../Controllers/categorycontroller.js';
+import verifyToken from '../Middlewares/verifytokenmiddleware.js';
+const router = express.Router();
+router.get('/',verifyToken, categoryController.getAllCategories);
+router.get('/getonecategory/:categoryId',verifyToken,categoryController.getOneGategory);
+router.post('/addCategory',verifyToken,categoryController.addCategory);
+router.put('/updateCategory/:categoryId',verifyToken,categoryController.updateCategory);
+router.delete('/delteCategory/:categoryId',verifyToken,categoryController.deleteCategory);
+export default router;

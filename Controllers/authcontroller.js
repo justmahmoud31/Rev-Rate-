@@ -66,7 +66,7 @@ const login = async (req, res) => {
 
     const user = await Reviewer.findOne({ where: { email } });
     if (!user)
-      return res.status(400).send({ ERROR: "Invalid email or password" });
+      return res.status(400).json({ ERROR: "Invalid email or password" });
 
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword)
