@@ -1,5 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
+import Category from './Category.js';
 class Brand extends Model{}
 Brand.init({
     brandId:{
@@ -7,8 +8,13 @@ Brand.init({
         primaryKey: true,
         autoIncrement: true
     },
-    categoryId:{
+    categoryId: {
         type: DataTypes.INTEGER,
+        references: {
+            model: Category,
+            key: 'categoryId'
+        },
+        allowNull: false
     },
     brandName:{
         type:DataTypes.STRING,
