@@ -15,22 +15,23 @@ const getAllCategories = async (req, res) => {
     });
   }
 };
-const getOneGategory = async(req,res)=>{
-  try{
-    const {categoryId} = req.params;
-    if(!categoryId){
+const getOneGategory = async (req, res) => {
+  try {
+    const { categoryId } = req.params;
+    if (!categoryId) {
       return res.status(400).json({ ERROR: "Category ID is required" });
     }
-    const oneCategory = await Category.Category.findOne({where:{categoryId}});
-    if(!oneCategory){
+    const oneCategory = await Category.Category.findOne({
+      where: { categoryId },
+    });
+    if (!oneCategory) {
       return res.status(404).json({ ERROR: "Not Found" });
     }
     res.status(200).json({ Message: "Found", Data: oneCategory });
-
-  }catch(err){
-    res.status(500).json({ Status:"ERROR" , Message:err });
+  } catch (err) {
+    res.status(500).json({ Status: "ERROR", Message: err });
   }
-}
+};
 const addCategory = async (req, res) => {
   try {
     const { error } = CategorySchema.CategorySchema.validate(req.body);
@@ -102,9 +103,9 @@ const updateCategory = async (req, res) => {
     });
   }
 };
-const deleteCategory = async (req,res)=>{
-  try{
-    const {categoryId} = req.params;
+const deleteCategory = async (req, res) => {
+  try {
+    const { categoryId } = req.params;
     const existingCategory = await Category.Category.findOne({
       where: { categoryId },
     });
@@ -116,11 +117,17 @@ const deleteCategory = async (req,res)=>{
       Status: "Success",
       Message: "Category deleted successfully",
     });
-  }catch(err){
+  } catch (err) {
     res.status(500).json({
       Status: "Error",
       Message: err,
     });
   }
-}
-export default { getAllCategories, addCategory,updateCategory,deleteCategory,getOneGategory};
+};
+export default {
+  getAllCategories,
+  addCategory,
+  updateCategory,
+  deleteCategory,
+  getOneGategory,
+};

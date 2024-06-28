@@ -1,0 +1,10 @@
+import { Router } from "express";
+import {addProduct,deleteProduct,getAllProducts, getOneProduct, updateProduct} from '../Controllers/productcontroller.js';
+import verifyToken from "../Middlewares/verifytokenmiddleware.js";
+const router = Router();
+router.get('/',verifyToken,getAllProducts);
+router.get('/getoneproduct/:productId',verifyToken,getOneProduct);
+router.post('/addproduct',verifyToken,addProduct);
+router.put('/updateproduct/:productId',verifyToken,updateProduct);
+router.delete('/deleteproduct/:productId',verifyToken,deleteProduct);
+export default router;
