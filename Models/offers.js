@@ -5,7 +5,7 @@ import Brand from "./Brand.js";
 class Offers extends Model {}
 
 Offers.init({
-  offerId: {
+  offersId: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
@@ -31,7 +31,7 @@ Offers.init({
 }, {
   sequelize,  
   modelName: "Offers",
-  tableName: "offers",
+  tableName: "Offers",
   timestamps: false,
 });
 

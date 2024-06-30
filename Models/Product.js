@@ -47,13 +47,13 @@ Product.init({
     type:DataTypes.INTEGER,
     defaultValue:0
   },
-  productDetails :{
+  detail :{
     type:DataTypes.STRING,
   }
 },{
     sequelize,
     modelName:'Product',
-    tableName:'product',
+    tableName:'Product',
     timestamps: false
 });
 export default Product;

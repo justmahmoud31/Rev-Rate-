@@ -18,7 +18,7 @@ Category.init({
 },{
     sequelize,
     modelName:'Category',
-    tableName:'category',
+    tableName:'Category',
     timestamps: false
 })
 export default {Category};

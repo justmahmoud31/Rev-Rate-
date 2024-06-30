@@ -53,7 +53,7 @@ const addProduct = async (req, res) => {
         Message: error.details[0].message,
       });
     }
-    const { brandId, name, price, offerId, rate, photos, productDetails } =
+    const { brandId, name, price, offerId, rate, photos, detail } =
       req.body;
     const product = await Product.create({
       brandId,
@@ -62,7 +62,7 @@ const addProduct = async (req, res) => {
       offerId,
       rate,
       photos,
-      productDetails,
+      detail,
     });
     res.status(201).json({
       Status: "Success",
@@ -70,10 +70,10 @@ const addProduct = async (req, res) => {
       data: product,
     });
   } catch (err) {
-    return res.status(500).josn({
+    res.status(500).json({
       Status: "Error",
       Message: err,
-    });
+    })
   }
 };
 const updateProduct = async (req, res) => {
@@ -102,7 +102,7 @@ const updateProduct = async (req, res) => {
         });
       }
   
-      const { brandId, name, price, offerId, rate, photos, productDetails } = req.body;
+      const { brandId, name, price, offerId, rate, photos, detail } = req.body;
   
       const updatedProduct = await Product.update(
         {
@@ -112,7 +112,7 @@ const updateProduct = async (req, res) => {
           offerId,
           rate,
           photos,
-          productDetails,
+          detail,
         },
         { where: { productId } }
       );

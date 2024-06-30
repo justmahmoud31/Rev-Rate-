@@ -6,8 +6,8 @@ const BrandSchema = Joi.object({
   brandEmail: Joi.string().email().required(),
   websiteLink: Joi.string().optional(),
   photos: Joi.string().optional(),
-  isActive: Joi.number().required(),
+  active: Joi.number().required(),
   subscription: Joi.string().required(),
-  brandDetails: Joi.string().optional(),
+  detail : Joi.string().optional()
 });
 export default  BrandSchema;

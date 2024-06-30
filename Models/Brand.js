@@ -36,7 +36,7 @@ Brand.init({
         type:DataTypes.STRING,
         allowNull:true
     },
-    isActive:{
+    active:{
         type:DataTypes.TINYINT,
         allowNull:false,
     },
@@ -44,14 +44,14 @@ Brand.init({
         type:DataTypes.STRING,
         allowNull:false  
     },
-    brandDetails:{
-        type:DataTypes.STRING,
+    detail:{
+        type:DataTypes.STRING(),
         allowNull:true
     }
 },{
     sequelize,
     modelName:'Brand',
-    tableName:'brand',
+    tableName:'Brand',
     timestamps: false
 });
 export default Brand;

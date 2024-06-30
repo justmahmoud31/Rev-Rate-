@@ -16,7 +16,6 @@ const getAllbrands = async (req, res) => {
     });
   }
 };
-
 const addBrand = async (req, res) => {
   try {
     const { error } = BrandSchema.validate(req.body);
@@ -24,16 +23,19 @@ const addBrand = async (req, res) => {
       return res
         .status(400)
         .json({ Status: "Error", Message: error.details[0].message });
+    
     const {
       brandName,
       logo,
       brandEmail,
       websiteLink,
       photos,
-      isActive,
+      active,
       subscription,
-      brandDetails,
+      categoryId,
+      detail
     } = req.body;
+
     const existingBrand = await Brand.findOne({ where: { brandName } });
     if (existingBrand) {
       return res.status(400).json({ Message: "Brand already exists" });
@@ -44,9 +46,10 @@ const addBrand = async (req, res) => {
       logo,
       websiteLink,
       photos,
-      isActive,
+      active,
       subscription,
-      brandDetails,
+      categoryId,
+      detail
     });
     res.status(201).json({
       Status: "Success",
@@ -56,11 +59,10 @@ const addBrand = async (req, res) => {
   } catch (err) {
     res.status(500).json({
       Status: "Error",
-      Message: err,
+      Message: err.message,
     });
   }
 };
-
 const getOneBrand = async (req, res) => {
   try {
     const { brandId } = req.params;
@@ -94,7 +96,8 @@ const updateBrand = async (req, res) => {
       photos,
       isActive,
       subscription,
-      brandDetails,
+      detail,
+      categoryId
     } = req.body;
 
     await Brand.update(
@@ -106,7 +109,8 @@ const updateBrand = async (req, res) => {
         photos,
         isActive,
         subscription,
-        brandDetails,
+        detail,
+        categoryId
       },
       { where: { brandId } }
     );

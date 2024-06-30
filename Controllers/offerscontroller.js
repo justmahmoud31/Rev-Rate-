@@ -19,8 +19,8 @@ const getAllOffers = async (req, res) => {
 };
 const getOneOffer = async (req, res) => {
   try {
-    const { offerId } = req.params;
-    const oneOffer = await Offers.findOne({ where: { offerId } });
+    const { offersId } = req.params;
+    const oneOffer = await Offers.findOne({ where: { offersId } });
     if (!oneOffer) {
       return res.status(404).json({
         Status: "Error",
@@ -78,7 +78,7 @@ const addOffer = async (req, res) => {
 };
 const updateOffer = async (req, res) => {
   try {
-    const { offerId } = req.params;
+    const { offersId } = req.params;
     const { error } = offersSchema.validate(req.body);
     if (error) {
       return res.status(400).json({
@@ -88,7 +88,7 @@ const updateOffer = async (req, res) => {
     }
     const { details, photo, promoCode, brandId } = req.body;
     const existingOffer = await Offers.findOne({
-      where: { offerId },
+      where: { offersId },
     });
     if (!existingOffer) {
       return res.status(404).json({ Message: "Offer not found" });
@@ -100,10 +100,10 @@ const updateOffer = async (req, res) => {
         promoCode,
         brandId,
       },
-      { where: { offerId } }
+      { where: { offersId } }
     );
     const updatedOffer = await Offers.findOne({
-      where: { offerId },
+      where: { offersId },
     });
     res.status(200).json({
       Status: "Success",
@@ -119,14 +119,14 @@ const updateOffer = async (req, res) => {
 };
 const deleteOffer = async (req, res) => {
   try {
-    const { offerId } = req.params;
+    const { offersId } = req.params;
     const existingOffer = await Offers.findOne({
-      where: { offerId },
+      where: { offersId },
     });
     if (!existingOffer) {
       return res.status(404).json({ Message: "Offer not found" });
     }
-    await Offers.destroy({ where: { offerId } });
+    await Offers.destroy({ where: { offersId } });
     res.status(200).json({
       Status: "Success",
       Message: "Offer Deleted Successfully",

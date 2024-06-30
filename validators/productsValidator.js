@@ -8,6 +8,6 @@ const ProductSchema = Joi.object({
     photos : Joi.string().required(),
     likes: Joi.number().optional(),
     dislikes:Joi.number().optional(),
-    productDetails : Joi.string().optional()  
+    detail : Joi.string().optional()  
 })
 export default ProductSchema;

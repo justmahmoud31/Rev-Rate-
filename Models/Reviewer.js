@@ -37,7 +37,7 @@ Reviewer.init({
 }, {
   sequelize,
   modelName: 'Reviewer',
-  tableName: 'reviewer', 
+  tableName: 'Reviewer', 
   timestamps: false
 });
 
