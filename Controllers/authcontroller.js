@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import ms from "ms"; // Ensure ms is imported
+import ms from "ms"; 
 import Reviewer from "../Models/Reviewer.js";
 import { registerSchema, loginSchema } from "../validators/authValidator.js";
 import bcrypt from "bcryptjs";
@@ -61,13 +61,10 @@ const login = async (req, res) => {
   try {
     const { error } = loginSchema.validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
-
     const { email, password } = req.body;
-
     const user = await Reviewer.findOne({ where: { email } });
     if (!user)
       return res.status(400).json({ ERROR: "Invalid email or password" });
-
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword)
       return res.status(400).json({ ERROR: "Invalid email or password" });

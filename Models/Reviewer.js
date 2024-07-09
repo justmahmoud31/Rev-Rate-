@@ -1,8 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
-
 class Reviewer extends Model {}
-
 Reviewer.init({
   reviewerId: {
     type: DataTypes.INTEGER,
@@ -33,6 +31,10 @@ Reviewer.init({
   points: {
     type: DataTypes.INTEGER,
     allowNull: true
+  },
+  isBlocked: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
   }
 }, {
   sequelize,
