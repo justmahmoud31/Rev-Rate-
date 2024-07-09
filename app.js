@@ -9,6 +9,7 @@ import categoryRoutes from './Routes/categoryRoutes.js';
 import offerRoutes from './Routes/offerRoutes.js';
 import productRoutes from './Routes/productRoutes.js';
 import ReviewerRoute from './Routes/ReviewerRoute.js';
+import reviewRoute from './Routes/reviewRoutes.js';
 import cors from 'cors';
 dotenv.config();
 const app = express();
@@ -22,6 +23,7 @@ app.use('/api/Categories',categoryRoutes);
 app.use('/api/offers',offerRoutes);
 app.use('/api/products',productRoutes);
 app.use('/api/reviewer',ReviewerRoute);
+app.use('/api/reviews',reviewRoute);
 sequelize.sync().then(() => {
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => {
