@@ -118,9 +118,133 @@ const addProductReview = async (req, res) => {
     res.status(500).json({ Status: "Error", Message: err.message });
   }
 };
+const addLike = async (req, res) => {
+  try {
+    const { reviewId } = req.params;
+    if (!reviewId) {
+      return res
+        .status(403)
+        .json({ Status: "error", Message: "Please enter a reviewId" });
+    }
+    const review = await Review.findByPk(reviewId);
+    if (!review) {
+      return res
+        .status(404)
+        .json({ Status: "error", Message: "Review not found" });
+    }
+    review.likes += 1;
+    await review.save();
+    res.status(200).json({
+      Status: "Success",
+      Message: "Like added successfully",
+      data: review,
+    });
+  } catch (err) {
+    res.status(500).json({ Status: "Error", Message: err.message });
+  }
+};
+const addDislike = async (req, res) => {
+  try {
+    const { reviewId } = req.params;
+    if (!reviewId) {
+      return res
+        .status(403)
+        .json({ Status: "error", Message: "Please enter a reviewId" });
+    }
+    const review = await Review.findByPk(reviewId);
+    if (!review) {
+      return res
+        .status(404)
+        .json({ Status: "error", Message: "Review not found" });
+    }
+    review.dislikes += 1;
+    await review.save();
+    res.status(200).json({
+      Status: "Success",
+      Message: "disLike added successfully",
+      data: review,
+    });
+  } catch (err) {
+    res.status(500).json({ Status: "Error", Message: err.message });
+  }
+};
+
+const getPopularReviews = async (req, res) => {
+  try {
+    const popularReviews = await Review.findAll({
+      order: [["likes", "DESC"]],
+      limit: 8,
+    });
+    res.status(200).json({
+      Status: "Success",
+      Message: "Popular reviews retrieved successfully",
+      data: popularReviews,
+    });
+  } catch (err) {
+    res.status(500).json({ Status: "Error", Message: err.message });
+  }
+};
+const EditBrandReview = async (req, res) => {
+  try {
+    const { reviewId } = req.params;
+    const { error } = ReviewSchema.validate(req.body);
+    if (error) {
+      return res
+        .status(403)
+        .json({ Status: "Error", Message: error.details[0].message });
+    }
+    const existingReview = await Review.findByPk(reviewId);
+    if (!existingReview) {
+      return res
+        .status(404)
+        .json({ Status: "Error", Message: "Review Not Found" });
+    }
+    const { comments, photos, quality, service, reviewerId } = req.body;
+    await Review.update(
+      {
+        comments,
+        photos,
+        quality,
+        service,
+        reviewerId,
+      },
+      {
+        where: { reviewId },
+      }
+    );
+    const updatedReview = await Review.findByPk(reviewId);
+    res
+      .status(200)
+      .json({
+        Status: "Success",
+        Message: "Review Updated Successfully",
+        data: updatedReview,
+      });
+  } catch (err) {
+    res.statuus(500).json({ Status: "Error", Message: err.message });
+  }
+};
+const deleteReview = async (req,res)=>{
+  try{
+    const {reviewId} = req.params;
+    const existingReview = await Review.findByPk(reviewId);
+    if(!existingReview){
+      return res.status(404).json({"Status":"Error" , "Message":"Review Not Found"});
+    }
+    await Review.destroy({where:{reviewId}});
+    res.status(200).json({"Status":"Sucess","Message":"Review deleted sucessfully"});
+  }catch(err){
+    res.statuus(500).json({ Status: "Error", Message: err.message });
+  }
+}
 export default {
   getBrandreviews,
   getProductReviews,
   addBrandReview,
   addProductReview,
+  addLike,
+  addDislike,
+  getPopularReviews,
+  EditBrandReview,
+  deleteReview
 };
