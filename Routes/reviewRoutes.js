@@ -10,5 +10,6 @@ router.patch('/editreview/:reviewId',verifyToken,ReviewController.EditBrandRevie
 router.get('/brandReviews/:brandId',verifyToken,ReviewController.getBrandreviews);
 router.get('/productreviews/:productId',verifyToken,ReviewController.getProductReviews);
 router.get('/popularreviews',verifyToken,ReviewController.getPopularReviews);
+router.get('/getreviewrate/:reviewId',verifyToken,ReviewController.getReviewRate);
 router.delete('/deletereview/:reviewId',verifyToken,ReviewController.deleteReview);
 export default router;

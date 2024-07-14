@@ -213,30 +213,62 @@ const EditBrandReview = async (req, res) => {
       }
     );
     const updatedReview = await Review.findByPk(reviewId);
-    res
-      .status(200)
-      .json({
-        Status: "Success",
-        Message: "Review Updated Successfully",
-        data: updatedReview,
-      });
+    res.status(200).json({
+      Status: "Success",
+      Message: "Review Updated Successfully",
+      data: updatedReview,
+    });
   } catch (err) {
-    res.statuus(500).json({ Status: "Error", Message: err.message });
+    res.status(500).json({ Status: "Error", Message: err.message });
   }
 };
-const deleteReview = async (req,res)=>{
-  try{
-    const {reviewId} = req.params;
+const deleteReview = async (req, res) => {
+  try {
+    const { reviewId } = req.params;
     const existingReview = await Review.findByPk(reviewId);
-    if(!existingReview){
-      return res.status(404).json({"Status":"Error" , "Message":"Review Not Found"});
+    if (!existingReview) {
+      return res
+        .status(404)
+        .json({ Status: "Error", Message: "Review Not Found" });
     }
-    await Review.destroy({where:{reviewId}});
-    res.status(200).json({"Status":"Sucess","Message":"Review deleted sucessfully"});
-  }catch(err){
-    res.statuus(500).json({ Status: "Error", Message: err.message });
+    await Review.destroy({ where: { reviewId } });
+    res
+      .status(200)
+      .json({ Status: "Sucess", Message: "Review deleted sucessfully" });
+  } catch (err) {
+    res.status(500).json({ Status: "Error", Message: err.message });
   }
-}
+};
+const getReviewRate = async (req, res) => {
+  try {
+    const { reviewId } = req.params;
+    const review = await Review.findByPk(reviewId);
+
+    if (!review) {
+      return res
+        .status(404)
+        .json({ Status: "Error", Message: "Review Not Found" });
+    }
+    let likes = review.likes;
+    let dislikes = review.dislikes;
+    const calculateRating = (likes, dislikes) => {
+      const totalVotes = likes + dislikes;
+      if (totalVotes === 0) {
+        return 0;
+      }
+      const ratio = likes / totalVotes;
+      const rating = ratio * 5;
+      return rating;
+    };
+    let rate = calculateRating(likes, dislikes);
+    res
+      .status(201)
+      .json({ Status: "Success", Message: "Rate of the review", data: rate });
+  } catch (err) {
+    res.status(500).json({ Status: "Error", Message: err.message });
+  }
+};
+
 export default {
   getBrandreviews,
   getProductReviews,
@@ -246,5 +278,6 @@ export default {
   addDislike,
   getPopularReviews,
   EditBrandReview,
-  deleteReview
+  deleteReview,
+  getReviewRate,
 };

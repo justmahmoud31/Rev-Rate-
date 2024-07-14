@@ -1,5 +1,7 @@
 import Category from "../Models/Category.js";
 import CategorySchema from "../validators/categoryvalidators.js";
+import Brand from '../Models/Brand.js';
+import Product from '../Models/Product.js';
 const getAllCategories = async (req, res) => {
   try {
     const allCategories = await Category.Category.findAll();
@@ -15,23 +17,35 @@ const getAllCategories = async (req, res) => {
     });
   }
 };
-const getOneGategory = async (req, res) => {
+const getOneCategory = async (req, res) => {
   try {
     const { categoryId } = req.params;
     if (!categoryId) {
       return res.status(400).json({ ERROR: "Category ID is required" });
     }
+
     const oneCategory = await Category.Category.findOne({
       where: { categoryId },
     });
+
     if (!oneCategory) {
       return res.status(404).json({ ERROR: "Not Found" });
     }
-    res.status(200).json({ Message: "Found", Data: oneCategory });
+
+    const brands = await Brand.findAll({ where: { categoryId } });
+    const Products = await Product.findAll({where:{categoryId}});
+    const responseData = {
+      category: oneCategory,
+      brands: brands,
+      products : Products
+    };
+
+    res.status(200).json({ Message: "Found", Data: responseData });
   } catch (err) {
-    res.status(500).json({ Status: "ERROR", Message: err });
+    res.status(500).json({ Status: "ERROR", Message: err.message });
   }
 };
+
 const addCategory = async (req, res) => {
   try {
     const { error } = CategorySchema.CategorySchema.validate(req.body);
@@ -129,5 +143,5 @@ export default {
   addCategory,
   updateCategory,
   deleteCategory,
-  getOneGategory,
+  getOneCategory,
 };

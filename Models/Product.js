@@ -2,6 +2,7 @@ import { Model, DataTypes } from "sequelize";
 import sequelize from "../config/database.js";
 import  Brand  from "./Brand.js";
 import {Offers} from './offers.js';
+import Category from "./Category.js";
 class Product extends Model {}
 Product.init({
   productId: {
@@ -14,6 +15,13 @@ Product.init({
     references: {
       model: Brand,
       key: "brandId",
+    },
+  },
+  categoryId : {
+    type: DataTypes.INTEGER,
+    references: {
+      model: Category,
+      key: "categoryId",
     },
   },
   name: {
