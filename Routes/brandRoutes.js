@@ -1,10 +1,10 @@
 import { Router } from "express";
-import verifyToken from '../Middlewares/verifytokenmiddleware.js';
+import authBrand from '../Middlewares/verifybrandTokenMiddleware.js';
 import { getAllbrands,addBrand, getOneBrand, updateBrand, deleteBrand } from '../Controllers/brandcontroller.js';
 const router = Router();
 router.get('/',getAllbrands);
-router.post('/addbrand',verifyToken,addBrand);
+router.post('/addbrand',authBrand,addBrand);
 router.get('/getonebrand/:brandId',getOneBrand);
-router.put('/updatebrand/:brandId',verifyToken,updateBrand);
-router.delete('/deletebrand/:brandId',verifyToken,deleteBrand);
+router.put('/updatebrand/:brandId',authBrand,updateBrand);
+router.delete('/deletebrand/:brandId',authBrand,deleteBrand);
 export default router;

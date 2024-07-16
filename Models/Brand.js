@@ -1,9 +1,12 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
 import Category from './Category.js';
-class Brand extends Model{}
+import bcrypt from "bcryptjs";
+
+class Brand extends Model {}
+
 Brand.init({
-    brandId:{
+    brandId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
@@ -16,42 +19,56 @@ Brand.init({
         },
         allowNull: false
     },
-    brandName:{
-        type:DataTypes.STRING,
-        allowNull:false,
+    brandName: {
+        type: DataTypes.STRING,
+        allowNull: false,
     },
-    logo:{
-        type:DataTypes.STRING,
-        allowNull:true,
+    logo: {
+        type: DataTypes.STRING,
+        allowNull: true,
     },
-    brandEmail:{
-        type:DataTypes.STRING,
-        allowNull:false,
+    brandEmail: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
     },
-    websiteLink:{
-        type:DataTypes.STRING,
-        allowNull:true
+    brandPassword: {
+        type: DataTypes.STRING,
+        allowNull: true
     },
-    photos:{
-        type:DataTypes.STRING,
-        allowNull:true
+    websiteLink: {
+        type: DataTypes.STRING,
+        allowNull: true
     },
-    active:{
-        type:DataTypes.TINYINT,
-        allowNull:false,
+    photos: {
+        type: DataTypes.STRING,
+        allowNull: true
     },
-    subscription:{
-        type:DataTypes.STRING,
-        allowNull:false  
+    active: {
+        type: DataTypes.TINYINT,
+        allowNull: false,
     },
-    detail:{
-        type:DataTypes.STRING(),
-        allowNull:true
+    subscription: {
+        type: DataTypes.STRING,
+        allowNull: false  
+    },
+    detail: {
+        type: DataTypes.STRING,
+        allowNull: true
     }
-},{
+}, {
     sequelize,
-    modelName:'Brand',
-    tableName:'Brand',
-    timestamps: false
+    modelName: 'Brand',
+    tableName: 'Brand',
+    timestamps: false,
+    hooks: {
+        beforeCreate: async (brand) => {
+            if (brand.brandPassword) {
+                const salt = await bcrypt.genSalt(10);
+                brand.brandPassword = await bcrypt.hash(brand.brandPassword, salt);
+            }
+        }
+    }
 });
+
 export default Brand;

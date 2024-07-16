@@ -10,7 +10,9 @@ import offerRoutes from './Routes/offerRoutes.js';
 import productRoutes from './Routes/productRoutes.js';
 import ReviewerRoute from './Routes/ReviewerRoute.js';
 import reviewRoute from './Routes/reviewRoutes.js';
+import brandAuthRoute from './Routes/brandAuthRoute.js';
 import cors from 'cors';
+
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -24,6 +26,8 @@ app.use('/api/offers',offerRoutes);
 app.use('/api/products',productRoutes);
 app.use('/api/reviewer',ReviewerRoute);
 app.use('/api/reviews',reviewRoute);
+app.use('/api/brand', brandAuthRoute);
+
 sequelize.sync().then(() => {
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => {
