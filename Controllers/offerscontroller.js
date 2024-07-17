@@ -138,4 +138,5 @@ const deleteOffer = async (req, res) => {
     });
   }
 };
+
 export { getAllOffers, getOneOffer, addOffer, updateOffer, deleteOffer };

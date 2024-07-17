@@ -62,6 +62,7 @@ const addBrandReview = async (req, res) => {
         .status(404)
         .json({ Status: "Not Found", Message: "Brand Not Found" });
     }
+
     const { comments, photos, quality, service, reviewerId } = req.body;
     const { error } = ReviewSchema.validate(req.body);
     if (error) {
@@ -69,23 +70,27 @@ const addBrandReview = async (req, res) => {
         .status(403)
         .json({ Status: "error", Message: error.details[0].message });
     }
+    const photoArray = Array.isArray(photos) ? photos : [photos];
+
     const review = await Review.create({
       comments,
       brandId,
       quality,
       service,
-      photos,
+      photos: photoArray,
       reviewerId,
     });
+
     res.status(200).json({
       Status: "Success",
-      Message: "Review added Succesfully",
+      Message: "Review added Successfully",
       data: review,
     });
   } catch (err) {
     res.status(500).json({ Status: "Error", Message: err.message });
   }
 };
+
 const addProductReview = async (req, res) => {
   try {
     const { productId } = req.params;
