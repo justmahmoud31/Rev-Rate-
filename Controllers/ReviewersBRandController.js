@@ -50,7 +50,7 @@ const addFavBrand = async (req, res) => {
     return res.status(201).json({
       Status: "Success",
       Message: "Favorite Brand Added",
-      Data: reviewerBrand,
+      data: reviewerBrand,
     });
   } catch (err) {
     return res.status(500).json({ Status: "Error", Message: err.message });

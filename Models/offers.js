@@ -35,4 +35,4 @@ Offers.init({
   timestamps: false,
 });
 
-export { Offers };
+export  { Offers };
