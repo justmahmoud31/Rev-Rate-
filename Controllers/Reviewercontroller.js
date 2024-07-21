@@ -1,4 +1,6 @@
 import Reviewer from "../Models/Reviewer.js";
+import { registerSchema } from "../validators/authValidator.js";
+
 const getReviewer = async (req, res) => {
   try {
     const { reviewerId } = req.params;
@@ -11,6 +13,38 @@ const getReviewer = async (req, res) => {
       "data": reviewer
     })
   } catch (err) {
+    res.status(500).json({ "Status": "Error", "Message": err });
+  }
+}
+const updateReviewerProfile = async (req, res) => {
+  try {
+    const { reviewerId } = req.params;
+    const reviewer = await Reviewer.findByPk(reviewerId);
+    if (!reviewer) {
+      return res.status(404).json({ "Status": "Not Found", "Message": "Reviewer Not Found" });
+    }
+    const { username, email, password, profilePic, phone } = req.body;
+    const { error } = registerSchema.validate(req.body);
+    if (error) {
+      return res.status(403).json({ "Status": "Error", "Message": error.details[0].message });
+    }
+    const newReviewerProfile = await Reviewer.update({ username, email, password, profilePic, phone }, { where: { reviewerId } });
+    const updatedProfile = await Reviewer.findByPk(reviewerId);
+    res.status(201).json({ "Status": "updated", "Message": "Reviewer Profile Updated", "data": updatedProfile });
+  } catch (err) {
+    res.status(500).json({ "Status": "Error", "Message": err });
+  }
+}
+const deleteReviewerAccount = async(req,res)=>{
+  try{
+    const { reviewerId } = req.params;
+    const reviewer = await Reviewer.findByPk(reviewerId);
+    if (!reviewer) {
+      return res.status(404).json({ "Status": "Not Found", "Message": "Reviewer Not Found" });
+    }
+    await Reviewer.destroy({where:{reviewerId}});
+    res.status(201).json({"Status":"Done","Message":"Reviewer Account Removed"});
+  }catch(err){
     res.status(500).json({ "Status": "Error", "Message": err });
   }
 }
@@ -47,4 +81,4 @@ const unblockReviewer = async (req, res) => {
   }
 };
 
-export default { BlockReviewer, unblockReviewer ,getReviewer};
+export default { BlockReviewer, unblockReviewer, getReviewer,deleteReviewerAccount,updateReviewerProfile };
