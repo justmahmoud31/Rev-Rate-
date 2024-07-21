@@ -1,4 +1,19 @@
 import Reviewer from "../Models/Reviewer.js";
+const getReviewer = async (req, res) => {
+  try {
+    const { reviewerId } = req.params;
+    const reviewer = await Reviewer.findByPk(reviewerId);
+    if (!reviewer) {
+      return res.status(404).json({ "Status": "Not Found", "Message": "Reviewer Not Found" });
+    }
+    res.status(200).json({
+      "Status": "Found", "Message": "Reviewer Found",
+      "data": reviewer
+    })
+  } catch (err) {
+    res.status(500).json({ "Status": "Error", "Message": err });
+  }
+}
 const BlockReviewer = async (req, res) => {
   try {
     const { reviewerId } = req.params;
@@ -32,4 +47,4 @@ const unblockReviewer = async (req, res) => {
   }
 };
 
-export default { BlockReviewer, unblockReviewer };
+export default { BlockReviewer, unblockReviewer ,getReviewer};
