@@ -148,4 +148,40 @@ const deleteBrand = async (req, res) => {
       });
     }
   };
+const addBrnadLike = async(req,res)=>{
+  try{
+    const {brandId} = req.params;
+    const existingBrand =await Brand.findByPk(brandId);
+    if(!existingBrand){
+      return res.status(404).json({"Status":"Not Found","Message":"Brand Not Found"});
+    }
+    existingBrand.likes +=1;
+    await existingBrand.save();
+    res.status(200).json({
+      Status: "Success",
+      Message: "Like added successfully",
+      data: existingBrand,
+    });
+  }catch(err){
+    res.status(500).json({"Status":"Error","Message":err});
+  }
+}
+const addBrnaddisLike = async(req,res)=>{
+  try{
+    const {brandId} = req.params;
+    const existingBrand =await Brand.findByPk(brandId);
+    if(!existingBrand){
+      return res.status(404).json({"Status":"Not Found","Message":"Brand Not Found"});
+    }
+    existingBrand.dislikes +=1;
+    await existingBrand.save();
+    res.status(200).json({
+      Status: "Success",
+      Message: "disLike added successfully",
+      data: existingBrand,
+    });
+  }catch(err){
+    res.status(500).json({"Status":"Error","Message":err});
+  }
+}
 export { addBrand, getAllbrands, getOneBrand, updateBrand,deleteBrand };

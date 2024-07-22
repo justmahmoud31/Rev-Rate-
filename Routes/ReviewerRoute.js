@@ -7,6 +7,7 @@ router.patch('/blockreviewer/:reviewerId',verifyToken,Reviewercontroller.BlockRe
 router.patch('/unblockreviewer/:reviewerId',verifyToken,Reviewercontroller.unblockReviewer);
 router.get('/getreviewer/:reviewerId',verifyToken,Reviewercontroller.getReviewer);
 router.put('/updateProfile/:reviewerId',verifyToken,Reviewercontroller.updateReviewerProfile);
+router.get('/reviewerPoints/:reviewerId',Reviewercontroller.ReviewerRate)
 router.delete('/deleteAccount/:reviewerId',verifyToken,Reviewercontroller.deleteReviewerAccount);
 
 export default router;

@@ -1,4 +1,5 @@
 import Reviewer from "../Models/Reviewer.js";
+import Review from "../Models/Review.js";
 import { registerSchema } from "../validators/authValidator.js";
 
 const getReviewer = async (req, res) => {
@@ -35,16 +36,16 @@ const updateReviewerProfile = async (req, res) => {
     res.status(500).json({ "Status": "Error", "Message": err });
   }
 }
-const deleteReviewerAccount = async(req,res)=>{
-  try{
+const deleteReviewerAccount = async (req, res) => {
+  try {
     const { reviewerId } = req.params;
     const reviewer = await Reviewer.findByPk(reviewerId);
     if (!reviewer) {
       return res.status(404).json({ "Status": "Not Found", "Message": "Reviewer Not Found" });
     }
-    await Reviewer.destroy({where:{reviewerId}});
-    res.status(201).json({"Status":"Done","Message":"Reviewer Account Removed"});
-  }catch(err){
+    await Reviewer.destroy({ where: { reviewerId } });
+    res.status(201).json({ "Status": "Done", "Message": "Reviewer Account Removed" });
+  } catch (err) {
     res.status(500).json({ "Status": "Error", "Message": err });
   }
 }
@@ -80,5 +81,41 @@ const unblockReviewer = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+const ReviewerRate = async (req, res) => {
+  try {
+    const { reviewerId } = req.params;
+    const reviewer = await Reviewer.findByPk(reviewerId);
+    if(!reviewer){
+      return res.status(404).json({"Status":"Not Found","Message":"Reviewer Not Found"});
+    }
+    const reviewerReviews = await Review.findAll({ where: { reviewerId } });
+    const totalLikes = reviewerReviews.reduce((acc, review) => acc + review.likes, 0);
+    const totalDislikes = reviewerReviews.reduce((acc, review) => acc + review.dislikes, 0);
+    const calculateRating = (likes, dislikes) => {
+      const totalVotes = likes + dislikes;
+      if (totalVotes === 0) {
+        return 0;
+      }
+      const ratio = likes / totalVotes;
+      const rating = ratio * 5;
+      return rating;
+    };
+    const rate = calculateRating(totalLikes, totalDislikes);
+    reviewer.points = rate;
+    await reviewer.save()
+    res
+      .status(201)
+      .json({
+        Status: "Success",
+        Message: "Rate of the reviewer",
+        data: rate,
+        Likes: totalLikes,
+        disLikes: totalDislikes,
+      });
 
-export default { BlockReviewer, unblockReviewer, getReviewer,deleteReviewerAccount,updateReviewerProfile };
+  } catch (err) {
+    res.status(500).json({ Status: "Error", Message: err.message });
+  }
+};
+
+export default { ReviewerRate, BlockReviewer, unblockReviewer, getReviewer, deleteReviewerAccount, updateReviewerProfile };
