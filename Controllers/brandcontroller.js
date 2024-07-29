@@ -1,4 +1,5 @@
 import Brand from "../Models/Brand.js";
+import Review from "../Models/Review.js";
 import BrandSchema from "../validators/brandValidatros.js";
 
 const getAllbrands = async (req, res) => {
@@ -23,7 +24,7 @@ const addBrand = async (req, res) => {
       return res
         .status(400)
         .json({ Status: "Error", Message: error.details[0].message });
-    
+
     const {
       brandName,
       logo,
@@ -130,58 +131,57 @@ const updateBrand = async (req, res) => {
   }
 };
 const deleteBrand = async (req, res) => {
-    try {
-      const { brandId } = req.params;
-      const existingBrand = await Brand.findOne({ where: { brandId } });
-      if (!existingBrand) return res.status(404).json({ Message: "Brand not found" });
-  
-      await Brand.destroy({ where: { brandId } });
-  
-      res.status(200).json({
-        Status: "Success",
-        Message: "Brand deleted successfully",
-      });
-    } catch (err) {
-      res.status(500).json({
-        Status: "Error",
-        Message: err,
-      });
-    }
-  };
-const addBrnadLike = async(req,res)=>{
-  try{
-    const {brandId} = req.params;
-    const existingBrand =await Brand.findByPk(brandId);
-    if(!existingBrand){
-      return res.status(404).json({"Status":"Not Found","Message":"Brand Not Found"});
-    }
-    existingBrand.likes +=1;
-    await existingBrand.save();
+  try {
+    const { brandId } = req.params;
+    const existingBrand = await Brand.findOne({ where: { brandId } });
+    if (!existingBrand) return res.status(404).json({ Message: "Brand not found" });
+
+    await Brand.destroy({ where: { brandId } });
+
     res.status(200).json({
       Status: "Success",
-      Message: "Like added successfully",
-      data: existingBrand,
+      Message: "Brand deleted successfully",
     });
-  }catch(err){
-    res.status(500).json({"Status":"Error","Message":err});
+  } catch (err) {
+    res.status(500).json({
+      Status: "Error",
+      Message: err,
+    });
   }
-}
-const addBrnaddisLike = async(req,res)=>{
-  try{
-    const {brandId} = req.params;
-    const existingBrand =await Brand.findByPk(brandId);
-    if(!existingBrand){
-      return res.status(404).json({"Status":"Not Found","Message":"Brand Not Found"});
+};
+const brandRate = async (req, res) => {
+  try {
+    const { brandId } = req.params;
+    const brandReviews = await Review.findAll({ where: { brandId } });
+
+    if (brandReviews.length === 0) {
+      return res.status(404).json({
+        status: "Fail",
+        message: "No reviews found for this brand"
+      });
     }
-    existingBrand.dislikes +=1;
-    await existingBrand.save();
-    res.status(200).json({
-      Status: "Success",
-      Message: "disLike added successfully",
-      data: existingBrand,
+    let totalQuality = 0;
+    let totalService = 0;
+    brandReviews.forEach(review => {
+      totalQuality += parseFloat(review.quality);
+      totalService += parseFloat(review.service);
     });
-  }catch(err){
-    res.status(500).json({"Status":"Error","Message":err});
+    const averageQuality = (totalQuality / brandReviews.length).toFixed(2);
+    const averageService = (totalService / brandReviews.length).toFixed(2);
+    res.json({
+      status: "Success",
+      data: {
+        brandId: parseInt(brandId),
+        averageQuality,
+        averageService
+      }
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      status: "Error",
+      message: "An error occurred while calculating the brand rate"
+    });
   }
-}
-export { addBrand, getAllbrands, getOneBrand, updateBrand,deleteBrand };
+};
+export { addBrand, getAllbrands, getOneBrand, updateBrand, deleteBrand, brandRate };

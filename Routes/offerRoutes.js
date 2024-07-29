@@ -5,14 +5,16 @@ import {
   addOffer,
   updateOffer,
   deleteOffer,
+  getBrandOffers
 } from "../Controllers/offerscontroller.js";
 import verifyToken from "../Middlewares/verifytokenmiddleware.js";
 const router = Router();
 
 router.get("/", verifyToken, getAllOffers);
-router.get("/getoneoffer/:offerId", verifyToken, getOneOffer);
+router.get("/getoneoffer/:offersId", verifyToken, getOneOffer);
+router.get("/brandoffers/:brandId",verifyToken,getBrandOffers);
 router.post("/addoffer", verifyToken, addOffer);
-router.put("/updateoffer/:offerId", verifyToken, updateOffer);
-router.delete("/deleteoffer/:offerId", verifyToken, deleteOffer);
+router.put("/updateoffer/:offersId", verifyToken, updateOffer);
+router.delete("/deleteoffer/:offersId", verifyToken, deleteOffer);
 
 export default router;

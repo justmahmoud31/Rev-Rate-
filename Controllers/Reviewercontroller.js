@@ -68,14 +68,11 @@ const unblockReviewer = async (req, res) => {
   try {
     const { reviewerId } = req.params;
     const reviewer = await Reviewer.findByPk(reviewerId);
-
     if (!reviewer) {
       return res.status(404).json({ message: "Reviewer not found" });
     }
-
     reviewer.isBlocked = 0;
     await reviewer.save();
-
     res.status(200).json({ message: "Reviewer unblocked successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -85,12 +82,20 @@ const ReviewerRate = async (req, res) => {
   try {
     const { reviewerId } = req.params;
     const reviewer = await Reviewer.findByPk(reviewerId);
-    if(!reviewer){
-      return res.status(404).json({"Status":"Not Found","Message":"Reviewer Not Found"});
+    if (!reviewer) {
+      return res.status(404).json({ "Status": "Not Found", "Message": "Reviewer Not Found" });
     }
     const reviewerReviews = await Review.findAll({ where: { reviewerId } });
     const totalLikes = reviewerReviews.reduce((acc, review) => acc + review.likes, 0);
     const totalDislikes = reviewerReviews.reduce((acc, review) => acc + review.dislikes, 0);
+    if (reviewerReviews.length >= 100 && totalLikes > totalDislikes) {
+      reviewer.isTrusted = 1;
+      await reviewer.save();
+    }
+    else {
+      reviewer.isTrusted = 0;
+      await reviewer.save();
+    }
     const calculateRating = (likes, dislikes) => {
       const totalVotes = likes + dislikes;
       if (totalVotes === 0) {

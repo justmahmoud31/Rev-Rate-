@@ -35,6 +35,10 @@ Reviewer.init({
   isBlocked: {
     type: DataTypes.INTEGER,
     defaultValue: 0,
+  },
+  isTrusted:{
+    type:DataTypes.TINYINT,
+    allowNull:true
   }
 }, {
   sequelize,

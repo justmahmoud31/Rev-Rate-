@@ -62,7 +62,6 @@ const addBrandReview = async (req, res) => {
         .status(404)
         .json({ Status: "Not Found", Message: "Brand Not Found" });
     }
-
     const { comments, photos, quality, service, reviewerId } = req.body;
     const { error } = ReviewSchema.validate(req.body);
     if (error) {

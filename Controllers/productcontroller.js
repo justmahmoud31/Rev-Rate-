@@ -1,3 +1,4 @@
+import Brand from "../Models/Brand.js";
 import Product from "../Models/Product.js";
 import ProductSchema from "../validators/productsValidator.js";
 
@@ -102,7 +103,7 @@ const updateProduct = async (req, res) => {
       });
     }
 
-    const { brandId, name, price, offerId, photos, detail,categoryId } = req.body;
+    const { brandId, name, price, offerId, photos, detail, categoryId } = req.body;
 
     const updatedProduct = await Product.update(
       {
@@ -238,6 +239,19 @@ const getProductRate = async (req, res) => {
     res.status(500).json({ Status: "Error", Message: err.message });
   }
 };
+const getBrandProducts = async (req, res) => {
+  try {
+    const {brandId} = req.params;
+    const brand = await Brand.findByPk(brandId);
+    if (!brand) {
+      return res.status(404).json({ "Status": "Not Found", "Message": "Brand Not Found" })
+    }
+    const brandProducts = await Product.findAll({ where: { brandId } });
+    res.status(200).json({ "Status": "Found", "Message": "Brand Products", "data": brandProducts });
+  } catch (err) {
+    res.status(500).json({ Status: "Error", Message: err.message });
+  }
+}
 export {
   getAllProducts,
   addProduct,
@@ -247,4 +261,5 @@ export {
   addLike,
   addDisLike,
   getProductRate,
+  getBrandProducts
 };

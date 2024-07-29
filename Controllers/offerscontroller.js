@@ -138,5 +138,20 @@ const deleteOffer = async (req, res) => {
     });
   }
 };
-
-export { getAllOffers, getOneOffer, addOffer, updateOffer, deleteOffer };
+const getBrandOffers = async (req, res) => {
+  try {
+    const { brandId } = req.params;
+    const brand = await Brand.findByPk(brandId);
+    if (!brand) {
+      return res.status(404).json({ "Status": "Not Found", "Message": "Brand Not Found" })
+    }
+    const brandOffers = await Offers.findAll({ where: { brandId } });
+    res.status(200).json({ "Status": "Success", "Message": "Brand Offers", "data": brandOffers });
+  } catch (err) {
+    res.status(500).json({
+      Status: "Error",
+      Message: err,
+    });
+  }
+}
+export { getAllOffers, getOneOffer, addOffer, updateOffer, deleteOffer,getBrandOffers };
