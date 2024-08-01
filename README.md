@@ -26,7 +26,7 @@ Follow these steps to set up the project on your local machine:
    ```sh 
     npm i 
     ```
-4. **Run The project **
+4. **Run The project**
 #### Using Nodemon 
    ```sh
     nodemon 
