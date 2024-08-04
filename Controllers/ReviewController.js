@@ -277,7 +277,6 @@ const getReviewRate = async (req, res) => {
     res.status(500).json({ Status: "Error", Message: err.message });
   }
 };
-
 export default {
   getBrandreviews,
   getProductReviews,

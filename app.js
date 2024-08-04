@@ -15,6 +15,7 @@ import BrandLocationRoute from './Routes/BrandLocationRoute.js';
 import ReviewersBrandroutes from './Routes/ReviewersBrandroute.js';
 import ReviewersProductRoute from './Routes/ReviewersProductRoute.js';
 import ReviewersOffersRoutes from './Routes/ReviewersOffersRoutes.js';
+import SubCategoryRoutes from './Routes/SubCategoryRoutes.js';
 import cors from 'cors';
 dotenv.config();
 const app = express();
@@ -34,6 +35,7 @@ app.use('/api/brandLocation',BrandLocationRoute);
 app.use('/api/reviewerBrand',ReviewersBrandroutes);
 app.use('/api/reviewerProduct',ReviewersProductRoute);
 app.use('/api/reviewerOffers',ReviewersOffersRoutes);
+app.use('/api/category',SubCategoryRoutes);
 sequelize.sync().then(() => {
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => {

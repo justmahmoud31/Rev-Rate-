@@ -27,7 +27,7 @@ ReviewersOffers.init({
 },{
     
     sequelize,
-    modelName: "ReviewersOffera",
+    modelName: "ReviewersOffers",
     tableName: "ReviewersOffers",
     timestamps: false,
 }
