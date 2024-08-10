@@ -1,5 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
+import Review from './Review.js';
 class Reviewer extends Model {}
 Reviewer.init({
   reviewerId: {
@@ -46,5 +47,5 @@ Reviewer.init({
   tableName: 'Reviewer', 
   timestamps: false
 });
-
+Reviewer.hasMany(Review, { foreignKey: 'reviewerId' });
 export default Reviewer;

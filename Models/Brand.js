@@ -29,7 +29,7 @@ Brand.init({
     },
     brandEmail: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         unique: true
     },
     brandPassword: {

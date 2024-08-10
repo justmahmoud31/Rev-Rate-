@@ -3,7 +3,7 @@ const BrandSchema = Joi.object({
   brandName: Joi.string().required(),
   categoryId: Joi.number().required(),
   logo: Joi.string().optional(),
-  brandEmail: Joi.string().email().required(),
+  brandEmail: Joi.string().optional(),
   brandPassword: Joi.string().min(6).optional(),
   websiteLink: Joi.string().optional(),
   photos: Joi.string().optional(),

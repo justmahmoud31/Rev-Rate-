@@ -1,7 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "../config/database.js";
 import Product from './Product.js';
-import Reviewer from "./Reviewer.js";
 import Brand from "./Brand.js";
 
 class Review extends Model {}
@@ -14,9 +13,9 @@ Review.init({
   },
   reviewerId: {
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: true,
     references: {
-      model: Reviewer,
+      model: () => import('./Reviewer.js').then(m => m.default), // Dynamic import
       key: 'reviewerId'
     }
   },
@@ -49,8 +48,8 @@ Review.init({
     defaultValue: 0
   },
   photos: {
-    type: DataTypes.JSON,
-    allowNull: true
+    type: DataTypes.BLOB('long'),
+    allowNull: false
   },
   date: {
     type: DataTypes.DATE,
@@ -74,5 +73,10 @@ Review.init({
   tableName: 'Review',
   timestamps: false
 });
+
+(async () => {
+  const { default: Reviewer } = await import('./Reviewer.js');
+  Review.belongsTo(Reviewer, { foreignKey: 'reviewerId', as: 'reviewer' });
+})();
 
 export default Review;

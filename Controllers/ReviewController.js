@@ -1,4 +1,5 @@
 import Review from "../Models/Review.js";
+import Reviewer from "../Models/Reviewer.js";
 import ReviewSchema from "../validators/reviewValidator.js";
 const getBrandreviews = async (req, res) => {
   try {
@@ -8,17 +9,27 @@ const getBrandreviews = async (req, res) => {
         .status(404)
         .json({ Status: "Not Found", Message: "Brand Not Found" });
     }
+
     const reviews = await Review.findAll({
       where: {
         brandId: brandId,
       },
+      include: [
+        {
+          model: Reviewer, 
+          as: 'reviewer', 
+          attributes: ['username'], 
+        },
+      ],
     });
+
     if (reviews.length === 0) {
       return res.status(404).json({
         Status: "Not Found",
         Message: "No reviews found for this brand",
       });
     }
+
     res.status(200).json({
       Status: "Success",
       Data: reviews,
@@ -27,6 +38,8 @@ const getBrandreviews = async (req, res) => {
     res.status(500).json({ Error: err.message });
   }
 };
+
+
 const getProductReviews = async (req, res) => {
   try {
     const { productId } = req.params;
@@ -62,21 +75,33 @@ const addBrandReview = async (req, res) => {
         .status(404)
         .json({ Status: "Not Found", Message: "Brand Not Found" });
     }
-    const { comments, photos, quality, service, reviewerId } = req.body;
-    const { error } = ReviewSchema.validate(req.body);
+
+    const { comments, quality, service, reviewerId } = req.body;
+
+    // Validate body data
+    const { error } = ReviewSchema.validate({
+      comments,
+      quality,
+      service,
+      reviewerId
+    });
+
     if (error) {
       return res
         .status(403)
         .json({ Status: "error", Message: error.details[0].message });
     }
-    const photoArray = Array.isArray(photos) ? photos : [photos];
 
+    // Handle photo file
+    const photo = req.file ? req.file.buffer : null; // Use `req.file.buffer` if using memoryStorage
+
+    // Create review with photo
     const review = await Review.create({
       comments,
       brandId,
       quality,
       service,
-      photos: photoArray,
+      photos: photo, // Save the photo data
       reviewerId,
     });
 
@@ -89,6 +114,7 @@ const addBrandReview = async (req, res) => {
     res.status(500).json({ Status: "Error", Message: err.message });
   }
 };
+
 
 const addProductReview = async (req, res) => {
   try {

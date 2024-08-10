@@ -77,7 +77,7 @@ const login = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
     });
-    res.status(200).json({ message: "Logged in successfully", token });
+    res.status(200).json({ message: "Logged in successfully", token,"data":user });
   } catch (error) {
     res.status(500).json({ ERROR: error.message });
   }
