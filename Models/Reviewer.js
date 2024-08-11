@@ -48,4 +48,5 @@ Reviewer.init({
   timestamps: false
 });
 Reviewer.hasMany(Review, { foreignKey: 'reviewerId' });
+
 export default Reviewer;

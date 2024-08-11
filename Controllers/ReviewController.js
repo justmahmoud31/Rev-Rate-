@@ -1,3 +1,4 @@
+import Brand from "../Models/Brand.js";
 import Review from "../Models/Review.js";
 import Reviewer from "../Models/Reviewer.js";
 import ReviewSchema from "../validators/reviewValidator.js";
@@ -38,8 +39,6 @@ const getBrandreviews = async (req, res) => {
     res.status(500).json({ Error: err.message });
   }
 };
-
-
 const getProductReviews = async (req, res) => {
   try {
     const { productId } = req.params;
@@ -77,8 +76,6 @@ const addBrandReview = async (req, res) => {
     }
 
     const { comments, quality, service, reviewerId } = req.body;
-
-    // Validate body data
     const { error } = ReviewSchema.validate({
       comments,
       quality,
@@ -91,17 +88,13 @@ const addBrandReview = async (req, res) => {
         .status(403)
         .json({ Status: "error", Message: error.details[0].message });
     }
-
-    // Handle photo file
-    const photo = req.file ? req.file.buffer : null; // Use `req.file.buffer` if using memoryStorage
-
-    // Create review with photo
+    const photo = req.file ? req.file.buffer : null;
     const review = await Review.create({
       comments,
       brandId,
       quality,
       service,
-      photos: photo, // Save the photo data
+      photos: photo, 
       reviewerId,
     });
 
@@ -209,6 +202,12 @@ const getPopularReviews = async (req, res) => {
     const popularReviews = await Review.findAll({
       order: [["likes", "DESC"]],
       limit: 8,
+      include: [
+        {
+          model: Brand,
+          attributes: ["brandName"],
+        },
+      ],
     });
     res.status(200).json({
       Status: "Success",
@@ -219,6 +218,7 @@ const getPopularReviews = async (req, res) => {
     res.status(500).json({ Status: "Error", Message: err.message });
   }
 };
+
 const EditBrandReview = async (req, res) => {
   try {
     const { reviewId } = req.params;

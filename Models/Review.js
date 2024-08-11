@@ -78,5 +78,6 @@ Review.init({
   const { default: Reviewer } = await import('./Reviewer.js');
   Review.belongsTo(Reviewer, { foreignKey: 'reviewerId', as: 'reviewer' });
 })();
-
+Review.belongsTo(Brand, { foreignKey: 'brandId' });  
+Brand.hasMany(Review, { foreignKey: 'brandId' });
 export default Review;

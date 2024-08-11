@@ -2,6 +2,7 @@ import { Model, DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
 import Category from './Category.js';
 import bcrypt from "bcryptjs";
+import Review from './Review.js';
 
 class Brand extends Model {}
 
