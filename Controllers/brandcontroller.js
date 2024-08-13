@@ -160,20 +160,34 @@ const brandRate = async (req, res) => {
         message: "No reviews found for this brand"
       });
     }
+
     let totalQuality = 0;
     let totalService = 0;
+
     brandReviews.forEach(review => {
       totalQuality += parseFloat(review.quality);
       totalService += parseFloat(review.service);
     });
+
     const averageQuality = (totalQuality / brandReviews.length).toFixed(2);
     const averageService = (totalService / brandReviews.length).toFixed(2);
+
+    // Calculate the overall rate as an average of quality and service
+    const rate = ((parseFloat(averageQuality) + parseFloat(averageService)) / 2).toFixed(2);
+
+    // Update the brand's rate in the database
+    await Brand.update(
+      { rate }, // Update the rate column
+      { where: { brandId } }
+    );
+
     res.json({
       status: "Success",
       data: {
         brandId: parseInt(brandId),
         averageQuality,
-        averageService
+        averageService,
+        rate
       }
     });
   } catch (err) {

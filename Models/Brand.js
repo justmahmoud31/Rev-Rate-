@@ -56,6 +56,10 @@ Brand.init({
     detail: {
         type: DataTypes.STRING,
         allowNull: true
+    },
+    rate:{
+        type:DataTypes.INTEGER,
+        defaultValue:0
     }
 }, {
     sequelize,

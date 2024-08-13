@@ -1,6 +1,8 @@
-import Reviewer from "../Models/Reviewer.js";
 import Review from "../Models/Review.js";
+
+import Reviewer from "../Models/Reviewer.js";
 import { registerSchema } from "../validators/authValidator.js";
+
 
 const getReviewer = async (req, res) => {
   try {
@@ -122,5 +124,13 @@ const ReviewerRate = async (req, res) => {
     res.status(500).json({ Status: "Error", Message: err.message });
   }
 };
-
-export default { ReviewerRate, BlockReviewer, unblockReviewer, getReviewer, deleteReviewerAccount, updateReviewerProfile };
+const ReviewerReviews = async (req, res) => {
+  try {
+    const {reviewerId} = req.params;
+    const Reviews = await Review.findAll({ where: { reviewerId } });
+    res.status(200).json({ "Status": "Found", "Message": "Reviews Found", "data": Reviews });
+  } catch (err) {
+    res.status(500).json({ Status: "Error", Message: err.message });
+  }
+}
+export default { ReviewerRate, BlockReviewer, unblockReviewer, getReviewer, deleteReviewerAccount, ReviewerReviews, updateReviewerProfile };
