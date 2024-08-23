@@ -1,6 +1,7 @@
 import { Router } from "express";
 import authBrand from '../Middlewares/verifybrandTokenMiddleware.js';
 import { getAllbrands,addBrand, getOneBrand, updateBrand, deleteBrand,brandRate ,categoryBrands} from '../Controllers/brandcontroller.js';
+import { getAllbrands,addBrand, getOneBrand, updateBrand, deleteBrand,brandRate } from '../Controllers/brandcontroller.js';
 const router = Router();
 router.get('/',getAllbrands);
 router.post('/addbrand',authBrand,addBrand);

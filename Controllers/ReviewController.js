@@ -211,6 +211,7 @@ const getPopularReviews = async (req, res) => {
           model: (await import('../Models/Reviewer.js')).default,
           as: 'reviewer',
           attributes: ["profilePic"], 
+          attributes: ["brandName"],
         },
       ],
     });

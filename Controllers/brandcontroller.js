@@ -2,7 +2,6 @@ import Brand from "../Models/Brand.js";
 import Category from "../Models/Category.js";
 import Review from "../Models/Review.js";
 import BrandSchema from "../validators/brandValidatros.js";
-
 const getAllbrands = async (req, res) => {
   try {
     const allbrands = await Brand.findAll();
@@ -213,4 +212,6 @@ const brandRate = async (req, res) => {
     });
   }
 };
+
 export { addBrand, getAllbrands, getOneBrand, updateBrand, deleteBrand, brandRate,categoryBrands };
+
