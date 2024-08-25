@@ -206,12 +206,13 @@ const getPopularReviews = async (req, res) => {
         {
           model: Brand,
           attributes: ["brandName", "logo"],
+          attributes: ["brandName"]
         },
         {
           model: (await import('../Models/Reviewer.js')).default,
           as: 'reviewer',
           attributes: ["profilePic"], 
-          attributes: ["brandName"],
+         
         },
       ],
     });
