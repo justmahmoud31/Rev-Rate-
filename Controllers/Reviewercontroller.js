@@ -1,3 +1,4 @@
+import Brand from "../Models/Brand.js";
 import Review from "../Models/Review.js";
 
 import Reviewer from "../Models/Reviewer.js";
@@ -126,11 +127,24 @@ const ReviewerRate = async (req, res) => {
 };
 const ReviewerReviews = async (req, res) => {
   try {
-    const {reviewerId} = req.params;
-    const Reviews = await Review.findAll({ where: { reviewerId } });
-    res.status(200).json({ "Status": "Found", "Message": "Reviews Found", "data": Reviews });
+    const { reviewerId } = req.params;
+    const Reviews = await Review.findAll({
+      where: { reviewerId },
+      include: [
+        {
+          model: Brand,
+          attributes: ['brandName', 'logo'], 
+        }
+      ]
+    });
+    res.status(200).json({
+      Status: "Found",
+      Message: "Reviews Found",
+      data: Reviews
+    });
   } catch (err) {
     res.status(500).json({ Status: "Error", Message: err.message });
   }
-}
+};
+
 export default { ReviewerRate, BlockReviewer, unblockReviewer, getReviewer, deleteReviewerAccount, ReviewerReviews, updateReviewerProfile };
