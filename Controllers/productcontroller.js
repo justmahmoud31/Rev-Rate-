@@ -1,7 +1,6 @@
 import Brand from "../Models/Brand.js";
 import Product from "../Models/Product.js";
 import ProductSchema from "../validators/productsValidator.js";
-
 const getAllProducts = async (req, res) => {
   try {
     const allProducts = await Product.findAll();
